@@ -4,16 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FilterSearch">
+    tools:context=".FilterSearch"
+    >
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FILTER SEARCH REACHED"
+        android:id="@+id/filterTitle"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#D891C34A"
+        android:gravity="center"
+
+        android:text="[ Help Me Find! ]"
+
+        android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        android:layout_marginTop = "100dp"/>
+    <TextView
+        android:id="@+id/filterQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#03BCF4"
+        android:gravity="center"
+
+        android:text="What would you like to find?"
+        android:textColor="#455A64"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterTitle" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
