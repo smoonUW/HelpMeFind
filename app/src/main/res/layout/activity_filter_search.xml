@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FilterSearch"
+    android:background="#4652fc"
     >
 
     <TextView
         android:id="@+id/filterTitle"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#D891C34A"
+        android:background="@drawable/filter_title_background"
         android:gravity="center"
 
         android:text="[ Help Me Find! ]"
@@ -26,7 +27,7 @@
         android:id="@+id/filterQuestion"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#03BCF4"
+        android:background="@drawable/filter_question_background"
         android:gravity="center"
 
         android:text="What would you like to find?"
@@ -35,6 +36,71 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filterTitle" />
+
+    <Button
+        android:id="@+id/microwaveButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#b6d7a8"
+        android:text="Microwave"
+
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterQuestion" />
+
+    <Button
+        android:id="@+id/bathroomButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#FFEB3B"
+
+        android:text="Single Occupant Bathroom"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/microwaveButton" />
+
+    <Button
+        android:id="@+id/refrigeratorButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#CD5866"
+
+        android:text="Refrigerator"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/bathroomButton" />
+
+    <Button
+        android:id="@+id/lactationButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#9fc5f8"
+
+        android:text="Lactation Room"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/refrigeratorButton" />
+
+    <Spinner
+        android:id="@+id/radiusDropdown"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lactationButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

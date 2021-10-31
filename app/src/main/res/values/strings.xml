@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">HelpMeFind</string>
-
+    <string-array name="radii">
+        <item>0.5 Miles</item>
+        <item>1 Mile</item>
+        <item>3 Miles</item>
+        <item>5 Miles</item>
+        <item>10 Miles</item>
+    </string-array>
 </resources>
