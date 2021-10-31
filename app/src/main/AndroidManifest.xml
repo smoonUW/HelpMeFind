@@ -33,6 +33,15 @@
             android:name=".MapView"
             android:exported="false" />
         <activity
+            android:name=".ARSelected"
+            android:exported="true" />
+        <activity
+            android:name=".ARVerbose"
+            android:exported="true" />
+        <activity
+            android:name=".Feedback"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
