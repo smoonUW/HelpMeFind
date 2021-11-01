@@ -22,7 +22,7 @@ public class Welcome extends AppCompatActivity {
         for (int i = 1; i <= 100; i++) {
             progressBar.setProgress(i);
             try {
-                Thread.sleep(20);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

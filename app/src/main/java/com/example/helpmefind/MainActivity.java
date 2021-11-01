@@ -11,9 +11,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Right now MainActivity doesn't do anything and goes straight
-        // to Welcome
-        Intent intent = new Intent(this, Welcome.class);
-        startActivity(intent);
     }
 }
