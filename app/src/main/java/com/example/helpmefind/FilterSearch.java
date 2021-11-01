@@ -2,7 +2,9 @@ package com.example.helpmefind;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class FilterSearch extends AppCompatActivity {
 
@@ -42,26 +45,45 @@ public class FilterSearch extends AppCompatActivity {
         });
     }
 
-    public void saveSelection() {
+    public boolean saveSelection() {
         CheckBox microwave = (CheckBox) findViewById(R.id.microwaveCheckBox);
         CheckBox bathroom = (CheckBox) findViewById(R.id.bathroomCheckBox);
         CheckBox fridge = (CheckBox) findViewById(R.id.refrigeratorCheckBox);
         CheckBox lactation = (CheckBox) findViewById(R.id.lactationCheckBox);
-        // TODO check whether each box is checked, save state for use in next activities
-        // TODO use shared preferences?
+
+        if (!microwave.isChecked() && !bathroom.isChecked() && !fridge.isChecked() && !lactation.isChecked()) {
+            return false;
+        }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("com.example.helpmefind", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString("microwave", String.valueOf(microwave.isChecked())).apply();
+        sharedPreferences.edit().putString("bathroom", String.valueOf(bathroom.isChecked())).apply();
+        sharedPreferences.edit().putString("refrigerator", String.valueOf(fridge.isChecked())).apply();
+        sharedPreferences.edit().putString("lactation", String.valueOf(lactation.isChecked())).apply();
+        sharedPreferences.edit().putString("radius", String.valueOf(selectedRadius)).apply();
+
+        return true;
     }
 
     public void goToARView(View view) {
-        saveSelection();
-        // TODO get destination activity name
-//        Intent intent = new Intent();
-//        startActivity(intent);
+        boolean selectionMade = saveSelection();
+
+        if (selectedRadius == -1 || !selectionMade) {
+            Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(this, ARVerbose.class);
+            startActivity(intent);
+        }
     }
 
     public void goToMapView(View view) {
-        saveSelection();
-        // TODO get destination activity name
-//        Intent intent = new Intent();
-//        startActivity(intent);
+        boolean selectionMade = saveSelection();
+
+        if (selectedRadius == -1 || !selectionMade) {
+            Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(this, MapView.class);
+            startActivity(intent);
+        }
     }
 }
