@@ -10,13 +10,13 @@ public class Welcome extends AppCompatActivity {
 
     // activity does not show, issue may be with thread.sleep,
     // either main thread refuses to sleep or another method
-    // is needed (onPostDelayed?) in either case the progress bar is just for
+    // is needed (onPostDelayed?) instead of thread.sleep. in
+    // either case the progress bar is just for
     // show at the moment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
 
         ProgressBar progressBar=(ProgressBar) findViewById(R.id.progressBar);
         for (int i = 1; i <= 100; i++) {
