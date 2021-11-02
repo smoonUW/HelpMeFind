@@ -2,21 +2,36 @@ package com.example.helpmefind;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsFragment extends Fragment {
+
+    // Map Reference
+    private GoogleMap myMap;
+    // LocationClient Reference
+    private FusedLocationProviderClient myFusedLPClient;
+    // Identify a Reference for this particular permission
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 8675309;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -31,9 +46,7 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            myMap = googleMap;
         }
     };
 
@@ -42,7 +55,11 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        setupLocationClient();
+        return view;
     }
 
     @Override
@@ -51,7 +68,57 @@ public class MapsFragment extends Fragment {
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
+
             mapFragment.getMapAsync(callback);
+            displayMyLocation();
+        }
+    }
+
+    private void setupLocationClient(){
+        // LocationServices API:
+        // https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices
+        myFusedLPClient = LocationServices.getFusedLocationProviderClient(getActivity());
+    }
+
+    private void displayMyLocation() {
+        // Check if permission granted
+        int permission = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        // If not, ask for it
+        if (permission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+        // if permission granted, display market at current location
+        else {
+            myFusedLPClient.getLastLocation()
+                    .addOnCompleteListener(getActivity(), task-> {
+                        Location myLastKnownLocation = task.getResult();
+                        if (task.isSuccessful() && myLastKnownLocation != null){
+
+                            LatLng myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
+
+                            myMap.addMarker(new MarkerOptions()
+                                    .position(myLatLng));
+
+                            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,17));
+                        }
+                    });
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                displayMyLocation();
+            }
         }
     }
 }
