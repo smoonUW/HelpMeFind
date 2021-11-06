@@ -24,19 +24,19 @@ public class ARVerbose extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             if (item.getItemId() == R.id.back) {
-                //Intent intent = new Intent(this, <search>.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ARVerbose.this, FilterSearch.class);
+                startActivity(intent);
                 return true;
             }
             else if (item.getItemId() == R.id.select) {
                 // do something with the selection
-                //Intent intent = new Intent(this, ARSelected.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ARVerbose.this, ARSelected.class);
+                startActivity(intent);
                 return true;
             }
             else if (item.getItemId() == R.id.arrived) {
-                //Intent intent = new Intent(this, Feedback.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ARVerbose.this, Feedback.class);
+                startActivity(intent);
                 return true;
             }
             return true;
