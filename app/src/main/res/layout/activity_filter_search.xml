@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FilterSearch"
+    android:background="#4652fc"
+    >
+
+<!--    <TextView-->
+<!--        android:id="@+id/filterTitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:background="@drawable/filter_title_background"-->
+<!--        android:gravity="center"-->
+<!--        android:text="[ Help Me Find! ]"-->
+<!--        android:textSize="34sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/filterQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/filter_question_background"
+        android:gravity="center"
+
+        android:text="What would you like to find?"
+        android:textColor="#455A64"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/microwaveCheckBox"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#b6d7a8"
+        android:text="Microwave"
+        android:checked="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterQuestion" />
+
+    <CheckBox
+        android:id="@+id/bathroomCheckBox"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#FFEB3B"
+        android:checked="false"
+        android:text="Single Occupant Bathroom"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/microwaveCheckBox" />
+
+    <CheckBox
+        android:id="@+id/refrigeratorCheckBox"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#ED5E53"
+        android:checked="false"
+
+        android:text="Refrigerator"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/bathroomCheckBox" />
+
+    <CheckBox
+        android:id="@+id/lactationCheckBox"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#9fc5f8"
+
+        android:checked="false"
+        android:text="Lactation Room"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/refrigeratorCheckBox" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lactationCheckBox">
+
+        <Spinner
+            android:id="@+id/radiusDropdown"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/selectARViewButton"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#6aa84f"
+        android:text="See selection in AR view"
+        android:textColor="#000000"
+        android:onClick="goToARView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <Button
+        android:id="@+id/selectMapViewButton"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#b6d7a8"
+        android:text="See selection in map view"
+        android:textColor="#000000"
+        android:onClick="goToMapView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectARViewButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

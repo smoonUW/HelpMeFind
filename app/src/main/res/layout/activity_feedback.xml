@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Feedback">
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Some Quick Questions..."
+        android:textSize="33dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/resourceHere"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/resourceHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Is the resource still here?"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@+id/resourceInaccessible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/resourceHereSwitch" />
+
+    <Switch
+        android:id="@+id/resourceHereSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@+id/resourceInaccessibleSwitch"
+        app:layout_constraintStart_toEndOf="@id/resourceHere"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/resourceInaccessible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Is the resource broken, locked, or inaccessible?"
+        app:layout_constraintTop_toBottomOf="@id/resourceHere"
+        app:layout_constraintBottom_toTopOf="@+id/editFeedback"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/resourceInaccessibleSwitch" />
+
+    <Switch
+        android:id="@+id/resourceInaccessibleSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        app:layout_constraintTop_toBottomOf="@id/resourceHereSwitch"
+        app:layout_constraintBottom_toTopOf="@+id/editFeedback"
+        app:layout_constraintStart_toEndOf="@id/resourceInaccessible"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editFeedback"
+        android:layout_width="323dp"
+        android:layout_height="171dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/resourceInaccessible" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Feedback"
+        app:layout_constraintTop_toBottomOf="@id/editFeedback"
+        app:layout_constraintBottom_toTopOf="@+id/toSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="submitFeedback"/>
+
+    <Button
+        android:id="@+id/toSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back To Search"
+        app:layout_constraintTop_toBottomOf="@id/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="goToSearch"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
