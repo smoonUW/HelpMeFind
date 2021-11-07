@@ -11,10 +11,15 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class ARSelected extends AppCompatActivity {
 
+    NavigationBarView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arselected);
+
+        bottomNavigationView = findViewById(R.id.bottomnav);
+        bottomNavigationView.setOnItemSelectedListener(bottomnavFunction);
     }
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {
         @Override
