@@ -2,6 +2,7 @@ package com.example.helpmefind;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -20,8 +21,8 @@ public class Feedback extends AppCompatActivity {
     }
 
     public void changeToSearchActivity() {
-        //Intent intent = new Intent(this, <activityname>);
-        //startActivity(intent);
+        Intent intent = new Intent(this, FilterSearch.class);
+        startActivity(intent);
     }
 
     @Override

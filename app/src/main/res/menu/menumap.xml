@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/back"
+        android:title="Back"
+        android:icon="@drawable/ic_arrow_back"/>
+
+    <item
+        android:id="@+id/select"
+        android:title="Confirm Selection"
+        android:icon="@drawable/ic_check"/>
+</menu>
