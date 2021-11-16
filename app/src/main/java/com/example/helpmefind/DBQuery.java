@@ -24,8 +24,6 @@ import java.util.ArrayList;
 public class DBQuery {
 
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
-    private FusedLocationProviderClient flpc;
     private LatLng currLoc;
     private final double MILES_TO_LAT = 0.01449275;
     private final double EARTH_RADIUS = 3959;
@@ -34,20 +32,24 @@ public class DBQuery {
         this.currLoc = currLoc;
     }
 
-    private ArrayList<Resource> read(int radius, String[] types) {
+    public ArrayList<Resource> read(double radius, ArrayList<String> types) {
         CollectionReference res = db.collection("resources");
         double minLat = currLoc.latitude - MILES_TO_LAT*radius;
         double maxLat = currLoc.latitude + MILES_TO_LAT*radius;
         double[] longBounds = calcLongBounds(radius);
-        Query distQ = res.whereLessThan("latitude", maxLat).whereGreaterThan("latitude", minLat).whereLessThan("longitude",longBounds[1]).whereGreaterThan("longitude", longBounds[0]);
+        Query latQ = res.whereLessThan("latitude", maxLat).whereGreaterThan("latitude", minLat);
         ArrayList<Resource> resources = new ArrayList<Resource>();
         for (String type : types) {
-            distQ.whereEqualTo("type", type).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            latQ.whereEqualTo("type", type).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            resources.add(document.toObject(Resource.class));
+                            Resource r = document.toObject(Resource.class);
+                            if (longBounds[0] <= r.getLongitude() && r.getLongitude() <= longBounds[1]) {
+                                resources.add(r);
+                                Log.i("ADDED RESOURCE:", r.getName());
+                            }
                         }
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
@@ -58,7 +60,7 @@ public class DBQuery {
         return resources;
     }
 
-    private double[] calcLongBounds(int radius) {
+    private double[] calcLongBounds(double radius) {
         double[] bounds = new double[2];
         double rootTerm = Math.sqrt(Math.sin(radius/(2*EARTH_RADIUS))/Math.pow(Math.cos(currLoc.latitude),2));
         bounds[0] = currLoc.longitude + 2*Math.asin((-1)*rootTerm);

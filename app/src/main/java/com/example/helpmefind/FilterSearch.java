@@ -14,11 +14,13 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 public class FilterSearch extends AppCompatActivity {
 
-    double selectedRadius = -1;
+    static double selectedRadius = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,19 @@ public class FilterSearch extends AppCompatActivity {
 
     public void goToMapView(View view) {
         ArrayList<String> types = saveSelection();
+
+//        uncomment for testing purposes:
+
+//        LatLng currLoc = new LatLng(43.073994, -89.3882834);
+//        DBQuery dbq = new DBQuery(currLoc);
+//        ArrayList<Resource> rs = dbq.read(selectedRadius, types);
+//        for (Resource r : rs) {
+//            if (r.getComments() != null) {
+//                Log.i("COMMENT SIZE", String.valueOf(r.getComments().size()));
+//            } else {
+//                Log.i("NULL COMMENTS", r.getName());
+//            }
+//        }
 
         if (selectedRadius == -1 || types.size() == 0) {
             Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
