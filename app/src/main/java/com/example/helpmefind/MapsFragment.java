@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 public class MapsFragment extends Fragment {
 
@@ -32,6 +36,8 @@ public class MapsFragment extends Fragment {
     private FusedLocationProviderClient myFusedLPClient;
     // Identify a Reference for this particular permission
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 8675309;
+
+    private ArrayList<Resource> resources;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -57,6 +63,16 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        MapView mapViewActivity = (MapView) getActivity();
+
+        resources = mapViewActivity.getResourceArrayList();
+
+        if (resources != null){
+            for (int i = 0; i < resources.size(); i++){
+                Log.i("DisplayMyStuff", resources.get(i).toString() );
+            }
+        }
 
         setupLocationClient();
         return view;
@@ -102,6 +118,12 @@ public class MapsFragment extends Fragment {
                                     .position(myLatLng));
 
                             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,17));
+
+                            if (resources != null){
+                                for(Resource r : resources){
+                                    myMap.addMarker(new MarkerOptions().position(r.getLatLon()));
+                                }
+                            }
                         }
                     });
         }

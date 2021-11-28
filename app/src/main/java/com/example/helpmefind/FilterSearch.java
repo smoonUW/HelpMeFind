@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class FilterSearch extends AppCompatActivity {
 
     double selectedRadius = -1;
@@ -83,6 +85,12 @@ public class FilterSearch extends AppCompatActivity {
             Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(this, MapView.class);
+            ArrayList<Resource> resourceList = new ArrayList();
+            resourceList.add(new Resource("College Library 1F Microwave FILTER SEARCH", "microwave",43.076656, -89.401360,"600 N Park St, Madison, WI 53706"));
+            resourceList.add(new Resource("1197 College Library: Restroom + Changing Room", "restroom", 43.076656, -89.401360,"600 N Park St, Madison, WI 53706"));
+            resourceList.add(new Resource("Memorial Union Lower Level: Restroom + Wheelchair Accessible", "restroom", 43.075840, -89.399830,"800 Langdon St, Madison, WI 53706"));
+            intent.putParcelableArrayListExtra("resources", resourceList);
+            this.startActivity(intent);
             startActivity(intent);
         }
     }
