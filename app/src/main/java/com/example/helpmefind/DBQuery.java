@@ -4,6 +4,8 @@ package com.example.helpmefind;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DBQuery {
@@ -32,13 +35,15 @@ public class DBQuery {
         this.currLoc = currLoc;
     }
 
-    public ArrayList<Resource> read(double radius, ArrayList<String> types) {
+    public void read(double radius, ArrayList<String> types, int targetActivity, Context context) {
+
         CollectionReference res = db.collection("resources");
         double minLat = currLoc.latitude - MILES_TO_LAT*radius;
         double maxLat = currLoc.latitude + MILES_TO_LAT*radius;
         double[] longBounds = calcLongBounds(radius);
         Query latQ = res.whereLessThan("latitude", maxLat).whereGreaterThan("latitude", minLat);
         ArrayList<Resource> resources = new ArrayList<Resource>();
+        Log.i("DBQUERY.READ","ABOUT TO QUERY");
         for (String type : types) {
             latQ.whereEqualTo("type", type).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -51,13 +56,20 @@ public class DBQuery {
                                 Log.i("ADDED RESOURCE:", r.getName());
                             }
                         }
+                        Intent intent;
+                        if (targetActivity == 0) {
+                            intent = new Intent(context, MapView.class);
+                        } else {
+                            intent = new Intent(context, ARVerbose.class);
+                        }
+                        intent.putExtra("list", (Serializable) resources);
+                        context.startActivity(intent);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 }
             });
         }
-        return resources;
     }
 
     private double[] calcLongBounds(double radius) {

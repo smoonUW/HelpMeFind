@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
 import java.util.logging.Filter;
 
 public class MapView extends AppCompatActivity {
@@ -19,11 +20,16 @@ public class MapView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("MAP VIEW","ARRIVED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
 
         bottomNavigationView = findViewById(R.id.bottomnav);
         bottomNavigationView.setOnItemSelectedListener(bottomnavFunction);
+
+        Intent intent = getIntent();
+
+        ArrayList<Resource> resources = (ArrayList<Resource>) intent.getSerializableExtra("list");
     }
 
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {

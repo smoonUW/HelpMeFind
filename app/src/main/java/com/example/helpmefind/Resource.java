@@ -2,9 +2,10 @@ package com.example.helpmefind;
 
 import android.location.Address;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Resource {
+public class Resource implements Serializable {
     private String name;
     private String type;
     private double latitude;
