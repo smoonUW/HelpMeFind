@@ -2,18 +2,31 @@ package com.example.helpmefind;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -21,14 +34,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Random;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     // Map Reference
     private GoogleMap myMap;
@@ -39,22 +59,7 @@ public class MapsFragment extends Fragment {
 
     private ArrayList<Resource> resources;
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            myMap = googleMap;
-        }
-    };
+    private Marker selectedMarker = null;
 
     @Nullable
     @Override
@@ -85,7 +90,7 @@ public class MapsFragment extends Fragment {
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
 
-            mapFragment.getMapAsync(callback);
+            mapFragment.getMapAsync(this);
             displayMyLocation();
         }
     }
@@ -114,16 +119,12 @@ public class MapsFragment extends Fragment {
 
                             LatLng myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
 
-                            myMap.addMarker(new MarkerOptions()
-                                    .position(myLatLng));
+                            //setUpClusterer(myLatLng, 17);
 
                             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,17));
 
-                            if (resources != null){
-                                for(Resource r : resources){
-                                    myMap.addMarker(new MarkerOptions().position(r.getLatLon()));
-                                }
-                            }
+                            setupResourceMarkers();
+
                         }
                     });
         }
@@ -142,5 +143,275 @@ public class MapsFragment extends Fragment {
                 displayMyLocation();
             }
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+
+        // This could be interesting if we wanted to do anything with it.
+        //https://developers.google.com/maps/documentation/android-sdk/events#indoor_map_events
+
+        Log.i("MARKER", "Clicked");
+        if (selectedMarker != null){
+            selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker());
+        }
+        if (selectedMarker != null){
+            IconGenerator oldIconFactory = new IconGenerator(getActivity().getApplicationContext());
+            //oldIconFactory.setColor(Color.RED);
+            oldIconFactory.setStyle(IconGenerator.STYLE_RED);
+            String title = selectedMarker.getTitle();
+            String snippet = selectedMarker.getSnippet();
+            LatLng position = selectedMarker.getPosition();
+            String type ="Type Not Found";
+            selectedMarker.remove();
+
+            for (Resource r : resources){
+//                if (r.getName().equals(title)
+//                        && r.toString().equals(snippet)
+//                        && r.getLatLon().equals(position)){
+//                    type = r.getType();
+//                    break;
+//                }
+                if (r.toString().equals(snippet)) {
+                    type = r.getType();
+                    break;
+                }
+            }
+
+            Marker oldMarker = addIcon(oldIconFactory, type,position);
+            oldMarker.setTitle(title);
+            oldMarker.setSnippet(snippet);
+            selectedMarker = null;
+        }
+        selectedMarker = marker;
+        IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
+        //iconFactory.setColor(Color.GREEN);
+        iconFactory.setStyle(IconGenerator.STYLE_GREEN);
+        String title = selectedMarker.getTitle();
+        String snippet = selectedMarker.getSnippet();
+        LatLng position = selectedMarker.getPosition();
+        String type = "";
+        selectedMarker.remove();
+
+        for (Resource r : resources){
+//                if (r.getName().equals(title)
+//                        && r.toString().equals(snippet)
+//                        && r.getLatLon().equals(position)){
+//                    type = r.getType();
+//                    break;
+//                }
+            if (r.toString().equals(snippet)) {
+                type = r.getType();
+                break;
+            }
+        }
+
+        selectedMarker = addIcon(iconFactory, type,position);
+        selectedMarker.setTitle(title);
+        selectedMarker.setSnippet(snippet);
+        selectedMarker.showInfoWindow();
+        return false;
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        myMap = googleMap;
+        myMap.setOnMarkerClickListener(this);
+        myMap.setOnMapClickListener(this);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onMapClick(@NonNull LatLng latLng) {
+        if (selectedMarker != null){
+            IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
+            //iconFactory.setColor(Color.RED);
+            iconFactory.setStyle(IconGenerator.STYLE_RED);
+            String title = selectedMarker.getTitle();
+            String snippet = selectedMarker.getSnippet();
+            LatLng position = selectedMarker.getPosition();
+            String type = "";
+            selectedMarker.remove();
+
+            for (Resource r : resources){
+//                if (r.getName().equals(title)
+//                        && r.toString().equals(snippet)
+//                        && r.getLatLon().equals(position)){
+//                    type = r.getType();
+//                    break;
+//                }
+                if (r.toString().equals(snippet)) {
+                    type = r.getType();
+                    break;
+                }
+            }
+
+            Marker marker = addIcon(iconFactory, type,position);
+            marker.setTitle(title);
+            marker.setSnippet(snippet);
+            selectedMarker = null;
+        }
+    }
+
+    private void setupResourceMarkers() {
+        // So long as an intent populated our resources list,
+        if (resources != null){
+
+            IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
+            //iconFactory.setColor(Color.RED);
+            iconFactory.setStyle(IconGenerator.STYLE_RED);
+
+            // Iterate through the resources received
+            // Iterate through the resources received
+            for (int i = 0; i < resources.size(); i++){
+                LatLng myLatLng = resources.get(i).getLatLon();
+                for (int j = 0; j < i; j++){
+                    if (myLatLng.equals(resources.get(j).getLatLon())){
+                        myLatLng = new LatLng(myLatLng.latitude+ (Math.random()-.5)/1500,
+                                myLatLng.longitude+(Math.random()-.5)/1500);
+                        break;
+                    }
+                }
+                Resource r = resources.get(i);
+
+                String text = "";
+                switch(r.getType()) {
+                    case "microwave" :
+                        text = "microwave";
+                        break;
+
+                    case "lactation" :
+                        text = "lactation";
+                        break;
+                    case "restroom" :
+                        text = "restroom";
+                        break;
+
+                    case "refrigerator" :
+                        text = "refrigerator";
+                        break;
+                }
+
+//                // Create a marker for this resource
+//                Marker resourceMarker = myMap.addMarker(new MarkerOptions().position(myLatLng));
+//                resourceMarker.setTitle(r.getName());
+//                // TODO: The snippet should probably be more concise than the full resource string.
+//                resourceMarker.setSnippet(r.toString());
+                Marker resourceMarker = addIcon(iconFactory, text, myLatLng);
+                resourceMarker.setTitle(r.getName());
+                // TODO: The snippet should probably be more concise than the full resource string.
+                resourceMarker.setSnippet(r.toString());
+
+            }
+        }
+    }
+
+
+    // Function Directly Taken From:
+    // https://www.geeksforgeeks.org/how-to-add-custom-marker-to-google-maps-in-android/
+    private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
+        // below line is use to generate a drawable.
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+
+        // below line is use to set bounds to our vector drawable.
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+
+        // below line is use to create a bitmap for our
+        // drawable which we have added.
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+        // below line is use to add bitmap in our canvas.
+        Canvas canvas = new Canvas(bitmap);
+
+        // below line is use to draw our
+        // vector drawable in canvas.
+        vectorDrawable.draw(canvas);
+
+        // after generating our bitmap we are returning our bitmap.
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+
+
+    //https://developers.google.com/maps/documentation/android-sdk/utility/marker-clustering#:~:text=%20Here%20is%20a%20summary%20of%20the%20steps,since%20ClusterManager%20implements%20%20the%20listener.%20More%20
+    public class MyMarker implements ClusterItem {
+        private final LatLng position;
+        private final String title;
+        private final String snippet;
+
+        public MyMarker(double lat, double lng, String title, String snippet) {
+            position = new LatLng(lat, lng);
+            this.title = title;
+            this.snippet = snippet;
+        }
+
+        @Override
+        public LatLng getPosition() {
+            return position;
+        }
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public String getSnippet() {
+            return snippet;
+        }
+    }
+
+    // Declare a variable for the cluster manager.
+    private ClusterManager<MyMarker> clusterManager;
+
+    private void setUpClusterer(LatLng currLocation, int zoom) {
+        // Position the map.
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currLocation, zoom));
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        clusterManager = new ClusterManager<MyMarker>(getActivity().getApplicationContext(), myMap);
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        myMap.setOnCameraIdleListener(clusterManager);
+        myMap.setOnMarkerClickListener(clusterManager);
+
+        // Add cluster items (markers) to the cluster manager.
+        addItems();
+    }
+
+    private void addItems() {
+
+        // So long as an intent populated our resources list,
+        if (resources != null) {
+            // Iterate through the resources received
+            for (int i = 0; i < resources.size(); i++) {
+                LatLng myLatLng = resources.get(i).getLatLon();
+                for (int j = 0; j < i; j++) {
+                    if (myLatLng.equals(resources.get(j).getLatLon())) {
+                        myLatLng = new LatLng(myLatLng.latitude + (Math.random() - .5) / 1500,
+                                myLatLng.longitude + (Math.random() - .5) / 1500);
+                        break;
+                    }
+                }
+                MyMarker resourceMarker = new MyMarker(myLatLng.latitude, myLatLng.longitude, "Title " + resources.get(i).getName(), "Description " + resources.get(i).toString());
+                clusterManager.addItem(resourceMarker);
+            }
+        }
+    }
+
+    private Marker addIcon(IconGenerator iconFactory, CharSequence text, LatLng position) {
+
+        Bitmap myIcon  = iconFactory.makeIcon(text);
+
+        MarkerOptions markerOptions = new MarkerOptions().
+                icon(BitmapDescriptorFactory.fromBitmap(myIcon)).
+                position(position).
+                anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+
+        Marker marker = myMap.addMarker(markerOptions);
+        return marker;
     }
 }
