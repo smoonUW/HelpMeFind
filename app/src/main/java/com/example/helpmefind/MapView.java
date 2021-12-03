@@ -20,7 +20,7 @@ public class MapView extends AppCompatActivity {
     NavigationBarView bottomNavigationView;
     private MapView thisObject = this;
     ArrayList<Resource> resourceArrayList;
-
+    Resource selectedResource = null;
     //Resource libraryMicrowave = new Resource("College Library 1F Microwave", "microwave",43.076656, -89.401360,"600 N Park St, Madison, WI 53706");
     //Resource libraryRestroom = new Resource("1197 College Library: Restroom + Changing Room", "restroom", 43.076656, -89.401360,"600 N Park St, Madison, WI 53706");
    //Resource memUnionRestroom = new Resource("Memorial Union Lower Level: Restroom + Wheelchair Accessible", "restroom", 43.075840, -89.399830,"800 Langdon St, Madison, WI 53706");
@@ -43,6 +43,10 @@ public class MapView extends AppCompatActivity {
     protected ArrayList<Resource> getResourceArrayList(){
         return resourceArrayList;
     }
+
+    protected void selectResource(Resource r){
+        selectedResource = r;
+    }
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
@@ -56,6 +60,9 @@ public class MapView extends AppCompatActivity {
                 // do something with the selection
                 Log.i("MapView", "select pressed.");
                 Intent intent = new Intent(thisObject, ARSelected.class);
+                if (selectedResource != null){
+                    intent.putExtra("selectedResource", selectedResource);
+                }
                 startActivity(intent);
                 return true;
             }

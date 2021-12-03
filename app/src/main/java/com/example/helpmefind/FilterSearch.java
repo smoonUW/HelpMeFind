@@ -67,17 +67,6 @@ public class FilterSearch extends AppCompatActivity {
         return true;
     }
 
-    public void goToARView(View view) {
-        boolean selectionMade = saveSelection();
-
-        if (selectedRadius == -1 || !selectionMade) {
-            Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
-        } else {
-            Intent intent = new Intent(this, ARVerbose.class);
-            startActivity(intent);
-        }
-    }
-
     public void goToMapView(View view) {
         boolean selectionMade = saveSelection();
 
