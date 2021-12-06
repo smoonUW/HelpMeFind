@@ -38,9 +38,6 @@
             android:name=".ARSelected"
             android:exported="true" />
         <activity
-            android:name=".ARVerbose"
-            android:exported="true" />
-        <activity
             android:name=".Feedback"
             android:exported="true" />
         <activity
