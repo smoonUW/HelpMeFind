@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340352891149",
+    "project_id": "refreshing-mark-330722",
+    "storage_bucket": "refreshing-mark-330722.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340352891149:android:a97ff6cbbb3fecbad51844",
+        "android_client_info": {
+          "package_name": "com.example.helpmefind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340352891149-gq856e8gfq107l9rbg9c3rjalmfo2m3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT49wZGDyxbypGIwpvzNsSYaZXEFzcm44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340352891149-gq856e8gfq107l9rbg9c3rjalmfo2m3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
