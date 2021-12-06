@@ -39,10 +39,10 @@
         android:id="@+id/microwaveCheckBox"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="#b6d7a8"
-        android:text="Microwave"
         android:checked="false"
+        android:text="Microwave"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
         android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,30 +110,17 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/selectARViewButton"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#6aa84f"
-        android:text="See selection in AR view"
-        android:textColor="#000000"
-        android:onClick="goToARView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
-
-    <Button
         android:id="@+id/selectMapViewButton"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="80dp"
         android:backgroundTint="#b6d7a8"
-        android:text="See selection in map view"
-        android:textColor="#000000"
         android:onClick="goToMapView"
+        android:text="Select Destination from Map"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectARViewButton" />
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,10 @@
 package com.example.helpmefind;
 
 import android.location.Address;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,6 +29,15 @@ public class Resource implements Serializable {
         // necessary to have no-arg constructor for firestore query
     }
 
+    protected Resource(Parcel in) {
+        name = in.readString();
+        type = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        address = in.readString();
+    }
+
+
     public String getName() {
         return name;
     }
@@ -48,6 +61,12 @@ public class Resource implements Serializable {
     public String toString(){
         return name+"\n"+type+"\n"+latitude+", "+longitude+"\n"+address;
     }
+
+
+    public LatLng getLatLon(){
+        return new LatLng(latitude, longitude);
+    }
+
 
     public List<String> getComments() { return comments; }
 }
