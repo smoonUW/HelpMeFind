@@ -1,10 +1,18 @@
 package com.example.helpmefind;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +22,46 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
+
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class FilterSearch extends AppCompatActivity {
 
-    double selectedRadius = -1;
+    // LocationClient Reference
+    private FusedLocationProviderClient myFusedLPClient;
+    // Identify a Reference for this particular permission
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 8675309;
+    // user selected search radius
+    static double selectedRadius = -1;
+    // user's current location
+    static LatLng myLatLng;
+
+    private final double MILES_TO_LAT = 0.01449275;
+    private final double EARTH_RADIUS = 3959;
+    private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +72,9 @@ public class FilterSearch extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.radii, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         radiusMenu.setAdapter(adapter);
+
+        myFusedLPClient = LocationServices.getFusedLocationProviderClient(this);
+        findMyLocation();
 
         radiusMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -47,40 +93,119 @@ public class FilterSearch extends AppCompatActivity {
         });
     }
 
-    public boolean saveSelection() {
+    public ArrayList<String> saveSelection() {
         CheckBox microwave = (CheckBox) findViewById(R.id.microwaveCheckBox);
         CheckBox bathroom = (CheckBox) findViewById(R.id.bathroomCheckBox);
         CheckBox fridge = (CheckBox) findViewById(R.id.refrigeratorCheckBox);
         CheckBox lactation = (CheckBox) findViewById(R.id.lactationCheckBox);
 
-        if (!microwave.isChecked() && !bathroom.isChecked() && !fridge.isChecked() && !lactation.isChecked()) {
-            return false;
+        ArrayList<String> types = new ArrayList<String>();
+        if (microwave.isChecked()) {
+            types.add("microwave");
+        }
+        if (bathroom.isChecked()) {
+            types.add("bathroom");
+        }
+        if (fridge.isChecked()) {
+            types.add("fridge");
+        }
+        if (lactation.isChecked()) {
+            types.add("lactation");
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.example.helpmefind", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString("microwave", String.valueOf(microwave.isChecked())).apply();
-        sharedPreferences.edit().putString("bathroom", String.valueOf(bathroom.isChecked())).apply();
-        sharedPreferences.edit().putString("refrigerator", String.valueOf(fridge.isChecked())).apply();
-        sharedPreferences.edit().putString("lactation", String.valueOf(lactation.isChecked())).apply();
-        sharedPreferences.edit().putString("radius", String.valueOf(selectedRadius)).apply();
-
-        return true;
+        return types;
     }
 
     public void goToMapView(View view) {
-        boolean selectionMade = saveSelection();
+        ArrayList<String> types = saveSelection();
 
-        if (selectedRadius == -1 || !selectionMade) {
+        if (selectedRadius == -1 || types.size() == 0) {
             Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
+        } else if (myLatLng == null) {
+            Toast.makeText(this, "Please allow location access", Toast.LENGTH_LONG).show();
         } else {
-            Intent intent = new Intent(this, MapView.class);
-            ArrayList<Resource> resourceList = new ArrayList();
-            resourceList.add(new Resource("College Library 1F Microwave FILTER SEARCH", "microwave",43.076656, -89.401360,"600 N Park St, Madison, WI 53706"));
-            resourceList.add(new Resource("1197 College Library: Restroom + Changing Room", "restroom", 43.076656, -89.401360,"600 N Park St, Madison, WI 53706"));
-            resourceList.add(new Resource("Memorial Union Lower Level: Restroom + Wheelchair Accessible", "restroom", 43.075840, -89.399830,"800 Langdon St, Madison, WI 53706"));
-            intent.putParcelableArrayListExtra("resources", resourceList);
-            this.startActivity(intent);
-            startActivity(intent);
+            readDataToView(types, 1);
         }
+    }
+
+    private void findMyLocation() {
+        // Check if permission granted
+        int permission = ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        // If not, ask for it
+        if (permission == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+        // if permission granted, get current location
+        else {
+            myFusedLPClient.getLastLocation()
+                    .addOnCompleteListener(this, task-> {
+                        Location myLastKnownLocation = task.getResult();
+                        if (task.isSuccessful() && myLastKnownLocation != null){
+                            myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
+                        }
+                    });
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                findMyLocation();
+            }
+        }
+    }
+
+    private void readDataToView(ArrayList<String> types, int targetActivity) {
+        CollectionReference res = db.collection("resources");
+        double minLat = myLatLng.latitude - MILES_TO_LAT*selectedRadius;
+        double maxLat = myLatLng.latitude + MILES_TO_LAT*selectedRadius;
+        double[] longBounds = calcLongBounds(selectedRadius);
+        Query latQ = res.whereLessThan("latitude", maxLat).whereGreaterThan("latitude", minLat);
+        ArrayList<Resource> resources = new ArrayList<Resource>();
+        for (String type : types) {
+            latQ.whereEqualTo("type", type).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Resource r = document.toObject(Resource.class);
+                            if (longBounds[0] <= r.getLongitude() && r.getLongitude() <= longBounds[1]) {
+                                resources.add(r);
+                                Log.i("ADDED RESOURCE:", r.getName());
+                            }
+                        }
+                        Intent intent;
+//                        if (targetActivity == 1) {
+//                            intent = new Intent(FilterSearch.this, MapView.class);
+//                        } else {
+//                            intent = new Intent(FilterSearch.this, ARVerbose.class);
+//                        }
+                        intent = new Intent(FilterSearch.this, MapView.class);
+
+                        intent.putExtra("list", (Serializable) resources);
+                        startActivity(intent);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    private double[] calcLongBounds(double radius) {
+        double[] bounds = new double[2];
+        double rootTerm = Math.sqrt(Math.sin(radius/(2*EARTH_RADIUS))/Math.pow(Math.cos(myLatLng.latitude),2));
+        bounds[0] = myLatLng.longitude + 2*Math.asin((-1)*rootTerm);
+        bounds[1] = myLatLng.longitude + 2*Math.asin(rootTerm);
+        return bounds;
     }
 }

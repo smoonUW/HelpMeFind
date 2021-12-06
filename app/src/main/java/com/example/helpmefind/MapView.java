@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
@@ -21,32 +22,42 @@ public class MapView extends AppCompatActivity {
     private MapView thisObject = this;
     ArrayList<Resource> resourceArrayList;
     Resource selectedResource = null;
-    //Resource libraryMicrowave = new Resource("College Library 1F Microwave", "microwave",43.076656, -89.401360,"600 N Park St, Madison, WI 53706");
-    //Resource libraryRestroom = new Resource("1197 College Library: Restroom + Changing Room", "restroom", 43.076656, -89.401360,"600 N Park St, Madison, WI 53706");
-   //Resource memUnionRestroom = new Resource("Memorial Union Lower Level: Restroom + Wheelchair Accessible", "restroom", 43.075840, -89.399830,"800 Langdon St, Madison, WI 53706");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("MAP VIEW","ARRIVED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
 
-        //resourceArrayList.add(libraryMicrowave);
-        //resourceArrayList.add(libraryRestroom);
-        //resourceArrayList.add(memUnionRestroom);
-
-        Intent i = this.getIntent();
-        resourceArrayList =  i.getParcelableArrayListExtra("resources");
         bottomNavigationView = findViewById(R.id.bottomnav);
         bottomNavigationView.setOnItemSelectedListener(bottomnavFunction);
+        bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(false);
+        Intent intent = getIntent();
+
+        resourceArrayList = (ArrayList<Resource>) intent.getSerializableExtra("list");
+        for (Resource r : resourceArrayList){
+            Log.i("R2String", r.toString());
+        }
     }
 
     protected ArrayList<Resource> getResourceArrayList(){
         return resourceArrayList;
     }
-
+    protected void setSelectedResource(Resource r){
+        if (r == null){
+            bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(false);
+        } else {
+            bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(true);
+        }
+        selectedResource = r;
+    }
+    protected Resource getSelectedResource() {
+        return selectedResource;
+    }
     protected void selectResource(Resource r){
         selectedResource = r;
     }
+
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {

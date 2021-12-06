@@ -61,6 +61,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     private Marker selectedMarker = null;
 
+    MapView mapViewActivity;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,7 +71,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        MapView mapViewActivity = (MapView) getActivity();
+        //MapView mapViewActivity = (MapView) getActivity();
+        mapViewActivity = (MapView) getActivity();
 
         resources = mapViewActivity.getResourceArrayList();
 
@@ -152,60 +155,55 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         //https://developers.google.com/maps/documentation/android-sdk/events#indoor_map_events
 
         Log.i("MARKER", "Clicked");
+        // If another marker had been selected before this marker was clicked
         if (selectedMarker != null){
-            selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker());
-        }
-        if (selectedMarker != null){
+            // We are going to replace the previous selected marker with a new marker containing
+            // same information, just with a different icon (the non-selected icon color)
             IconGenerator oldIconFactory = new IconGenerator(getActivity().getApplicationContext());
-            //oldIconFactory.setColor(Color.RED);
             oldIconFactory.setStyle(IconGenerator.STYLE_RED);
             String title = selectedMarker.getTitle();
             String snippet = selectedMarker.getSnippet();
             LatLng position = selectedMarker.getPosition();
-            String type ="Type Not Found";
+            // Remove the old marker
             selectedMarker.remove();
 
+            // What's going on here is a bit hackey.
+            // As of now, we are storing the entire toString value of a resource as a marker
+            // snippet. Since we aren't able to grab Resource.getType() from the marker itself,
+            // we use its snippet as a 'key' to find the matching resource from the list of all
+            // resources.
+            String type ="Type Not Found";
+
             for (Resource r : resources){
-//                if (r.getName().equals(title)
-//                        && r.toString().equals(snippet)
-//                        && r.getLatLon().equals(position)){
-//                    type = r.getType();
-//                    break;
-//                }
                 if (r.toString().equals(snippet)) {
                     type = r.getType();
                     break;
                 }
             }
 
+            // Once we've found the type, we will create a new marker whose icon has the type embedded
+            // as text inside it. (This is done in the adddIcon function.)
             Marker oldMarker = addIcon(oldIconFactory, type,position);
             oldMarker.setTitle(title);
             oldMarker.setSnippet(snippet);
-            selectedMarker = null;
+            // TODO: Not sure why this line of code was here, so i'm commenting it out for now.
+            //selectedMarker = null;
         }
         selectedMarker = marker;
         IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
-        //iconFactory.setColor(Color.GREEN);
         iconFactory.setStyle(IconGenerator.STYLE_GREEN);
         String title = selectedMarker.getTitle();
         String snippet = selectedMarker.getSnippet();
         LatLng position = selectedMarker.getPosition();
-        String type = "";
         selectedMarker.remove();
-
+        String type = "Type Not Found";
         for (Resource r : resources){
-//                if (r.getName().equals(title)
-//                        && r.toString().equals(snippet)
-//                        && r.getLatLon().equals(position)){
-//                    type = r.getType();
-//                    break;
-//                }
             if (r.toString().equals(snippet)) {
                 type = r.getType();
+                mapViewActivity.setSelectedResource(r);
                 break;
             }
         }
-
         selectedMarker = addIcon(iconFactory, type,position);
         selectedMarker.setTitle(title);
         selectedMarker.setSnippet(snippet);
@@ -226,21 +224,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onMapClick(@NonNull LatLng latLng) {
         if (selectedMarker != null){
             IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
-            //iconFactory.setColor(Color.RED);
             iconFactory.setStyle(IconGenerator.STYLE_RED);
             String title = selectedMarker.getTitle();
             String snippet = selectedMarker.getSnippet();
             LatLng position = selectedMarker.getPosition();
-            String type = "";
             selectedMarker.remove();
+            String type = "Type Not Found";
 
             for (Resource r : resources){
-//                if (r.getName().equals(title)
-//                        && r.toString().equals(snippet)
-//                        && r.getLatLon().equals(position)){
-//                    type = r.getType();
-//                    break;
-//                }
                 if (r.toString().equals(snippet)) {
                     type = r.getType();
                     break;
@@ -251,6 +242,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             marker.setTitle(title);
             marker.setSnippet(snippet);
             selectedMarker = null;
+            mapViewActivity.setSelectedResource(null);
         }
     }
 
@@ -259,15 +251,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         if (resources != null){
 
             IconGenerator iconFactory = new IconGenerator(getActivity().getApplicationContext());
-            //iconFactory.setColor(Color.RED);
             iconFactory.setStyle(IconGenerator.STYLE_RED);
 
-            // Iterate through the resources received
             // Iterate through the resources received
             for (int i = 0; i < resources.size(); i++){
                 LatLng myLatLng = resources.get(i).getLatLon();
                 for (int j = 0; j < i; j++){
-                    if (myLatLng.equals(resources.get(j).getLatLon())){
+                    // If more than one resource has the same lat and lng, then offset them by a
+                    // small random amount.
+                    if (myLatLng.equals(resources.get(j). getLatLon())){
                         myLatLng = new LatLng(myLatLng.latitude+ (Math.random()-.5)/1500,
                                 myLatLng.longitude+(Math.random()-.5)/1500);
                         break;
@@ -293,17 +285,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         break;
                 }
 
-//                // Create a marker for this resource
-//                Marker resourceMarker = myMap.addMarker(new MarkerOptions().position(myLatLng));
-//                resourceMarker.setTitle(r.getName());
-//                // TODO: The snippet should probably be more concise than the full resource string.
-//                resourceMarker.setSnippet(r.toString());
                 Marker resourceMarker = addIcon(iconFactory, text, myLatLng);
                 resourceMarker.setTitle(r.getName());
-                // TODO: The snippet should probably be more concise than the full resource string.
                 resourceMarker.setSnippet(r.toString());
 
             }
+            mapViewActivity.setSelectedResource(null);
         }
     }
 
