@@ -144,6 +144,8 @@ public class FilterSearch extends AppCompatActivity {
                         Location myLastKnownLocation = task.getResult();
                         if (task.isSuccessful() && myLastKnownLocation != null){
                             myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
+                        } else {
+                            Log.i("MYLATLNG", "Task was unsuccessful, so myLatLng is null.");
                         }
                     });
         }
