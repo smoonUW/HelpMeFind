@@ -136,6 +136,7 @@ public class FilterSearch extends AppCompatActivity {
         } else if (myLatLng == null) {
             Toast.makeText(this, "Please allow location access", Toast.LENGTH_LONG).show();
         } else {
+            Log.i("FS","going to read data");
             readDataToView(types, 1);
         }
     }
@@ -201,6 +202,7 @@ public class FilterSearch extends AppCompatActivity {
                         } else {
                             intent = new Intent(FilterSearch.this, ARVerbose.class);
                         }
+                        Log.i("FS","going to view");
                         intent.putExtra("list", (Serializable) resources);
                         startActivity(intent);
                     } else {

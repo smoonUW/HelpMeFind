@@ -30,6 +30,9 @@ public class MapView extends AppCompatActivity {
         Intent intent = getIntent();
 
         ArrayList<Resource> resources = (ArrayList<Resource>) intent.getSerializableExtra("list");
+        for (Resource r : resources) {
+            Log.i("MAPVIEW",r.toString());
+        }
     }
 
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {
