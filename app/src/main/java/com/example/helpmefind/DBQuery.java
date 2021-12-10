@@ -57,11 +57,12 @@ public class DBQuery {
                             }
                         }
                         Intent intent;
-                        if (targetActivity == 0) {
-                            intent = new Intent(context, MapView.class);
-                        } else {
-                            intent = new Intent(context, ARVerbose.class);
-                        }
+//                        if (targetActivity == 0) {
+//                            intent = new Intent(context, MapView.class);
+//                        } else {
+//                            intent = new Intent(context, ARVerbose.class);
+//                        }
+                        intent = new Intent(context, MapView.class);
                         intent.putExtra("list", (Serializable) resources);
                         context.startActivity(intent);
                     } else {

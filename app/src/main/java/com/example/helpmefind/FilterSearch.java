@@ -116,18 +116,6 @@ public class FilterSearch extends AppCompatActivity {
         return types;
     }
 
-    public void goToARView(View view) {
-        ArrayList<String> types = saveSelection();
-
-        if (selectedRadius == -1 || types.size() == 0) {
-            Toast.makeText(this, "Please select at least one resource and a radius value", Toast.LENGTH_LONG).show();
-        } else if (myLatLng == null) {
-            Toast.makeText(this, "Please allow location access", Toast.LENGTH_LONG).show();
-        } else {
-            readDataToView(types, 0);
-        }
-    }
-
     public void goToMapView(View view) {
         ArrayList<String> types = saveSelection();
 
@@ -136,7 +124,6 @@ public class FilterSearch extends AppCompatActivity {
         } else if (myLatLng == null) {
             Toast.makeText(this, "Please allow location access", Toast.LENGTH_LONG).show();
         } else {
-            Log.i("FS","going to read data");
             readDataToView(types, 1);
         }
     }
@@ -197,12 +184,13 @@ public class FilterSearch extends AppCompatActivity {
                             }
                         }
                         Intent intent;
-                        if (targetActivity == 1) {
-                            intent = new Intent(FilterSearch.this, MapView.class);
-                        } else {
-                            intent = new Intent(FilterSearch.this, ARVerbose.class);
-                        }
-                        Log.i("FS","going to view");
+//                        if (targetActivity == 1) {
+//                            intent = new Intent(FilterSearch.this, MapView.class);
+//                        } else {
+//                            intent = new Intent(FilterSearch.this, ARVerbose.class);
+//                        }
+                        intent = new Intent(FilterSearch.this, MapView.class);
+
                         intent.putExtra("list", (Serializable) resources);
                         startActivity(intent);
                     } else {
