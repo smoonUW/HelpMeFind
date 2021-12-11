@@ -127,7 +127,7 @@ public class Feedback extends AppCompatActivity {
         setContentView(R.layout.activity_feedback);
 
         Intent intent = getIntent();
-        Resource resource = (Resource) intent.getSerializableExtra("resource");
+        Resource resource = (Resource) intent.getSerializableExtra("selectedResource");
 
         CollectionReference resCollection = db.collection("resources");
         resCollection.whereEqualTo("address", resource.getAddress()).whereEqualTo("type", resource.getType()).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

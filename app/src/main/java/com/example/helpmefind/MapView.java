@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Filter;
 
@@ -72,7 +73,7 @@ public class MapView extends AppCompatActivity {
                 Log.i("MapView", "select pressed.");
                 Intent intent = new Intent(thisObject, ARSelected.class);
                 if (selectedResource != null){
-                    intent.putExtra("selectedResource", selectedResource);
+                    intent.putExtra("selectedResource", (Serializable) selectedResource);
                 }
                 startActivity(intent);
                 return true;
