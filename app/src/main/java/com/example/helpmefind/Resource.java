@@ -37,7 +37,6 @@ public class Resource implements Serializable {
         address = in.readString();
     }
 
-
     public String getName() {
         return name;
     }
@@ -62,11 +61,9 @@ public class Resource implements Serializable {
         return name+"\n"+type+"\n"+latitude+", "+longitude+"\n"+address;
     }
 
-
     public LatLng getLatLon(){
         return new LatLng(latitude, longitude);
     }
-
 
     public List<String> getComments() { return comments; }
 }
