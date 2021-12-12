@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="80dp"
         android:background="?attr/colorAccent"
         android:backgroundTint="@color/purple_700"
         android:fontFamily="sans-serif-condensed-medium"
@@ -19,6 +19,7 @@
         android:text="Select A Resource from Map"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

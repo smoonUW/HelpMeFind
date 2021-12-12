@@ -12,16 +12,16 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleX="2.5"
-        android:scaleY="2.5"
-        app:srcCompat="@mipmap/welcome_background_foreground" />
+        android:scaleX="2"
+        android:scaleY="2"
+        app:srcCompat="@mipmap/welcome_background_v2_foreground" />
 
     <TextView
         android:id="@+id/welcomeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:background="#7B1FA2"
+        android:background="#C43700B3"
         android:fontFamily="@font/asap_medium"
 
         android:gravity="center"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:background="#7B1FA2"
+        android:background="#C43700B3"
         android:fontFamily="@font/asap_medium"
         android:gravity="center"
         android:text="Resource Finder"
@@ -54,7 +54,7 @@
         android:id="@+id/welcomeSubheader2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
 
         android:layout_marginBottom="50dp"
         android:background="#A900796B"
@@ -70,8 +70,9 @@
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcomeSubheader" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeSubheader"
+        app:layout_constraintVertical_bias="0.971" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
