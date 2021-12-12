@@ -184,13 +184,8 @@ public class FilterSearch extends AppCompatActivity {
                             }
                         }
                         Intent intent;
-//                        if (targetActivity == 1) {
-//                            intent = new Intent(FilterSearch.this, MapView.class);
-//                        } else {
-//                            intent = new Intent(FilterSearch.this, ARVerbose.class);
-//                        }
                         intent = new Intent(FilterSearch.this, MapView.class);
-
+                        intent.putExtra("radius", selectedRadius);
                         intent.putExtra("list", (Serializable) resources);
                         startActivity(intent);
                     } else {

@@ -123,11 +123,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                             LatLng myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
 
                             //setUpClusterer(myLatLng, 17);
-
-                            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,17));
-
+                            Double selectedRadius = mapViewActivity.getSelectedRadius();
+                            float zoom = 1;
+                            if (selectedRadius <= 1) {
+                                zoom = 15;
+                            } else if (selectedRadius <= 5){
+                                zoom = 12;
+                            } else if (selectedRadius <= 10){
+                                zoom = 10;
+                            }
+                            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,zoom));
                             setupResourceMarkers();
-
                         }
                     });
         }

@@ -21,7 +21,7 @@ public class MapView extends AppCompatActivity {
     private MapView thisObject = this;
     ArrayList<Resource> resourceArrayList;
     Resource selectedResource = null;
-
+    double selectedRadius;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("MAP VIEW","ARRIVED");
@@ -37,6 +37,8 @@ public class MapView extends AppCompatActivity {
 
         Intent intent = getIntent();
         resourceArrayList = (ArrayList<Resource>) intent.getSerializableExtra("list");
+        selectedRadius = (Double) intent.getDoubleExtra("radius", 0.5);
+
         for (Resource r : resourceArrayList){
             Log.i("R2String", r.toString());
         }
@@ -56,11 +58,8 @@ public class MapView extends AppCompatActivity {
         }
         selectedResource = r;
     }
-    protected Resource getSelectedResource() {
-        return selectedResource;
-    }
-    protected void selectResource(Resource r){
-        selectedResource = r;
+    protected Double getSelectedRadius(){
+        return selectedRadius;
     }
 
     private NavigationBarView.OnItemSelectedListener bottomnavFunction = new NavigationBarView.OnItemSelectedListener() {
