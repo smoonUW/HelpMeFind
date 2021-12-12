@@ -7,39 +7,55 @@
     tools:context=".Wayfinder">
 
     <TextView
+        android:id="@+id/headingTitle"
+        android:layout_above="@+id/resourceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="You are heading towards:"/>
+
+    <TextView
         android:id="@+id/resourceName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="103dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="40dp"
         android:background="@color/purple_700"
         android:backgroundTint="@color/purple_700"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
         android:includeFontPadding="true"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
         android:text="Resource Name"
         android:textColor="@color/white"
         android:textSize="20dp" />
 
     <ImageView
         android:id="@+id/pointer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="260dp"
+        android:layout_height="250dp"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_launcher_foreground_arrow" />
+
+    <TextView
+        android:id="@+id/distanceTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Distance Away:"
+        android:layout_below="@+id/pointer"
+        android:layout_marginTop="30dp" />
+
     <TextView
         android:id="@+id/distance"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Distance goes here"
-        android:layout_below="@+id/pointer"
+        android:text="Distance will populate when location is acquired..."
+        android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"/>
+        android:layout_below="@+id/distanceTitle"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomnav"
