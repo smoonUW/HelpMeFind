@@ -4,46 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Welcome"
+    android:background="@color/teal_200"
 
-    android:background="@color/welcomeBackground">
+    tools:context=".Welcome">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="2.5"
+        android:scaleY="2.5"
+        app:srcCompat="@mipmap/welcome_background_foreground" />
 
     <TextView
         android:id="@+id/welcomeTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="[Help Me Find!]"
-        android:textColor="#FFFFFF"
-        android:textSize="48sp"
+        android:background="#7B1FA2"
+        android:fontFamily="@font/asap_medium"
 
-        android:textStyle="italic"
+        android:gravity="center"
+        android:text="[Help Me Find!]"
+        android:textColor="@color/white"
+        android:textSize="52sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/magnifyingGlassImage"
-        android:layout_width="176dp"
-        android:layout_height="178dp"
-        android:layout_marginTop="100dp"
-        android:background="#2196F3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <TextView
+        android:id="@+id/welcomeSubheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf="@+id/welcomeTitle"
-        app:srcCompat="@android:drawable/ic_menu_search" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="117dp"
-        android:layout_height="76dp"
+        android:background="#7B1FA2"
+        android:fontFamily="@font/asap_medium"
+        android:gravity="center"
+        android:text="Resource Finder"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/magnifyingGlassImage"
-        android:layout_marginTop="50dp"
-        android:max="100"
-        android:progress="0"
-        />
+        app:layout_constraintTop_toBottomOf="@id/welcomeTitle" />
+
+    <TextView
+        android:id="@+id/welcomeSubheader2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+
+        android:layout_marginBottom="50dp"
+        android:background="#A900796B"
+        android:fontFamily="@font/asap_medium"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="10dp"
+        android:text="Tap to Begin Search"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomeSubheader" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
