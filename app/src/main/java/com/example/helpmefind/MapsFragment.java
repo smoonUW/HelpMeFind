@@ -122,7 +122,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
                             LatLng myLatLng = new LatLng(myLastKnownLocation.getLatitude(), myLastKnownLocation.getLongitude());
 
-                            //setUpClusterer(myLatLng, 17);
+                            MarkerOptions markerOptions = new MarkerOptions().
+                                    icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)).
+                                    position(myLatLng).
+                                    title("MY CURRENT LOCATION");
+                            Marker currentLocationMarker = myMap.addMarker(markerOptions);
+                            currentLocationMarker.showInfoWindow();
+
                             Double selectedRadius = mapViewActivity.getSelectedRadius();
                             float zoom = 1;
                             if (selectedRadius <= 1) {
@@ -161,6 +167,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         //https://developers.google.com/maps/documentation/android-sdk/events#indoor_map_events
 
         Log.i("MARKER", "Clicked");
+        if (marker.getTitle().equals("MY CURRENT LOCATION")){
+            marker.showInfoWindow();
+            return true;
+        }
+
         // If another marker had been selected before this marker was clicked
         if (selectedMarker != null){
             // We are going to replace the previous selected marker with a new marker containing
