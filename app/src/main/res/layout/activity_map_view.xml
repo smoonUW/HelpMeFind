@@ -10,12 +10,17 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="408dp"
-        android:layout_height="82dp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="?attr/colorAccent"
+        android:backgroundTint="@color/purple_700"
+        android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
-        android:text="Select Resources from Map"
+        android:text="Select A Resource from Map"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,8 +36,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomnav"
-        android:layout_width="415dp"
-        android:layout_height="79dp"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"

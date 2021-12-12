@@ -35,7 +35,7 @@
             android:name=".MapView"
             android:exported="false" />
         <activity
-            android:name=".ARSelected"
+            android:name=".Wayfinder"
             android:exported="true" />
         <activity
             android:name=".Feedback"

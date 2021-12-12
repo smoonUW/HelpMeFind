@@ -1,21 +1,19 @@
 package com.example.helpmefind;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.logging.Filter;
 
 public class MapView extends AppCompatActivity {
 
@@ -32,9 +30,12 @@ public class MapView extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomnav);
         bottomNavigationView.setOnItemSelectedListener(bottomnavFunction);
-        bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(false);
-        Intent intent = getIntent();
 
+        MenuItem item =  bottomNavigationView.getMenu().findItem(R.id.select);
+        item.setVisible(false);
+        item.setEnabled(false);
+
+        Intent intent = getIntent();
         resourceArrayList = (ArrayList<Resource>) intent.getSerializableExtra("list");
         for (Resource r : resourceArrayList){
             Log.i("R2String", r.toString());
@@ -45,10 +46,13 @@ public class MapView extends AppCompatActivity {
         return resourceArrayList;
     }
     protected void setSelectedResource(Resource r){
+        MenuItem item = bottomNavigationView.getMenu().findItem(R.id.select);
         if (r == null){
-            bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(false);
+            item.setVisible(false);
+            item.setEnabled(false);
         } else {
-            bottomNavigationView.getMenu().findItem(R.id.select).setEnabled(true);
+            item.setVisible(true);
+            item.setEnabled(true);
         }
         selectedResource = r;
     }
@@ -71,7 +75,7 @@ public class MapView extends AppCompatActivity {
             else if (item.getItemId() == R.id.select) {
                 // do something with the selection
                 Log.i("MapView", "select pressed.");
-                Intent intent = new Intent(thisObject, ARSelected.class);
+                Intent intent = new Intent(thisObject, Wayfinder.class);
                 if (selectedResource != null){
                     intent.putExtra("selectedResource", (Serializable) selectedResource);
                 }

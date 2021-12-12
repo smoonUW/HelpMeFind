@@ -3,8 +3,8 @@
     <item
         android:id="@+id/back"
         android:title="Back"
-        android:icon="@drawable/ic_arrow_back"/>
-
+        android:icon="@drawable/ic_arrow_back"
+        />
     <item
         android:id="@+id/select"
         android:title="Confirm Selection"
