@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 public class Welcome extends AppCompatActivity implements View.OnClickListener {
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
