@@ -282,8 +282,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     case "lactation" :
                         text = "lactation";
                         break;
-                    case "restroom" :
-                        text = "restroom";
+                    case "bathroom" :
+                        text = "bathroom";
                         break;
 
                     case "refrigerator" :

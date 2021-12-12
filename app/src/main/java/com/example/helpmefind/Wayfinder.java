@@ -86,7 +86,9 @@ public class Wayfinder extends AppCompatActivity implements SensorEventListener 
                 // see further down for update location view
                 updateLocationInfo(location);
                 // This updates the distance from current location to destination
-                distance.setText(String.valueOf(location.distanceTo(destLoc)) + " meters");
+                double meters = location.distanceTo(destLoc);
+                int feet = (int) (meters*3.280839895);
+                distance.setText(String.valueOf(feet) + " feet");
             }
         };
         if (Build.VERSION.SDK_INT < 23) {
