@@ -300,6 +300,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     case "refrigerator" :
                         text = "refrigerator";
                         break;
+
+                    case "fridge":
+                        text = "fridge";
+                        break;
                 }
 
                 Marker resourceMarker = addIcon(iconFactory, text, myLatLng);
