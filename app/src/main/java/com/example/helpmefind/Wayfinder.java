@@ -92,7 +92,12 @@ public class Wayfinder extends AppCompatActivity implements SensorEventListener 
                 // This updates the distance from current location to destination
                 double meters = location.distanceTo(destLoc);
                 int feet = (int) (meters*3.280839895);
-                distance.setText(String.valueOf(feet) + " feet");
+                if (feet < 65) {
+                    distance.setText("The resource should be in the building in front of you!");
+                }
+                else {
+                    distance.setText(String.valueOf(feet) + " feet");
+                }
             }
         };
         if (Build.VERSION.SDK_INT < 23) {
