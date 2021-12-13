@@ -52,7 +52,15 @@
                 android:text="Resource Name"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Please keep the device flat"
+                android:gravity="center"
+                android:textColor="@color/purple_500"
+                android:textSize="20sp"
+                android:textStyle="italic" />
             <ImageView
                 android:id="@+id/pointer"
                 android:layout_width="260dp"
