@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Help Me Find Admin Access</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <!-- <script src="jquery-3.6.0.min.js"></script> -->
+    <div id="topbar">
+      <h1 id="dashboard-title">Dashboard</h1>
+      <button id="logout">Logout</button>
+    </div>
+    <!-- <p id="test">testing...</p> -->
+    <h3 id="commentsTitle">New User Comments</h3>
+    <table class="manageTable">
+      <colgroup>
+        <col span="2" class="norm_col">
+        <col span="1" id="fb_col">
+        <col span="3" class="norm_col">
+      </colgroup>
+      <thead>
+        <tr class="header_row">
+          <td>Address</td>
+          <td>Type</td>
+          <td>Comment</td>
+          <td>Date Submitted</td>
+          <td>Accept</td>
+          <td>Decline</td>
+        </tr>
+      </thead>
+      <tbody id="comment_body">
+      </tbody>
+    </table>
+    <h3 id="problemsTitle">Resource Issues</h3>
+    <table class="manageTable">
+      <colgroup>
+        <col span="2" class="norm_col">
+        <col span="1" id="fb_col">
+        <col span="3" class="norm_col">
+      </colgroup>
+      <thead>
+        <tr class="header_row">
+          <td>Address</td>
+          <td>Type</td>
+          <td>Issue</td>
+          <td>Date Submitted</td>
+          <td>Resolve</td>
+          <td>Delete Resource</td>
+        </tr>
+      </thead>
+      <tbody id="problem_body">
+      </tbody>
+    </table>
+    <h3 id="addResTitle">Add a New Resource</h3>
+    <table class="addTable">
+      <thead>
+        <tr class="header_row">
+          <td>Name:</td>
+          <td>Address:</td>
+          <td>Latitude:</td>
+          <td>Longitude:</td>
+          <td>Type:</td>
+        </tr>
+      </thead>
+      <tbody id="addition_body">
+        <td>
+          <input type="text" id="name" value="">
+        </td>
+        <td>
+          <input type="text" id="address" value="">
+        </td>
+        <td>
+          <input type="text" id="latitude" value="">
+        </td>
+        <td>
+          <input type="text" id="longitude" value="">
+        </td>
+        <td>
+          <input type="text" id="type" value="">
+        </td>
+      </tbody>
+    </table>
+    <input type="button" id="submit" value="Submit">
+    <br/>
+    <br/>
+    <br/>
+    <script type="module" src="dashboard-script.js"></script>
+  </body>
+</html>

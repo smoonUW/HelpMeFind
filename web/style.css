@@ -1,0 +1,84 @@
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#login-title {
+    margin: 5% auto;
+    text-align: center;
+}
+
+#error-message {
+    text-align: center;
+}
+
+input {
+    margin: 1% auto;
+    display:block;
+}
+
+#error-message {
+    margin: 1% auto;
+    display: block;
+    width: 150px;
+    color: red;
+    border: 1px solid red;
+    opacity: 0;
+}
+
+#login {
+    cursor:pointer;
+}
+
+/* dashboard */
+
+#topbar {
+    border-bottom: 1px black solid;
+}
+
+#dashboard-title {
+    display: inline;
+}
+
+#logout {
+    position:absolute;
+    right:2%;
+    top: 2%;
+}
+
+h3 {
+    margin-left: auto;
+    margin-top: 5%;
+    text-align: center;
+}
+
+.header_row {
+    border-bottom: 1px solid black;
+}
+
+.body_row {
+    border-bottom: 1px solid lightgrey;
+}
+
+#fb_col {
+    width: 350px;
+}
+
+.norm_col {
+    width: 120px;
+}
+
+.manageTable {
+    border: 1px solid black;
+    z-index: 9999;
+    border-collapse: collapse;
+    margin: 0px auto;
+}
+
+.addTable {
+    margin: 0px auto;
+}
+
+.cell_btn {
+    float: left;
+}
