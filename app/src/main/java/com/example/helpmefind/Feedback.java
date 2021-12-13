@@ -34,6 +34,7 @@ public class Feedback extends AppCompatActivity {
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "FEEDBACK";
     private static String resourceID;
+    private static Resource resource;
 
     public void submitFeedback(View view) {
         if (resourceID==null){
@@ -50,15 +51,17 @@ public class Feedback extends AppCompatActivity {
         EditText commentEditText = findViewById(R.id.commentEditText);
         String comment = commentEditText.getText().toString();
 
-        if (comment.length()!=0) {
-            if (!checked) {
+        if (comment.length()==0 && !checked && problem.length()==0) {
                 Toast.makeText(this, "Please fill in at least one field.", Toast.LENGTH_LONG).show();
                 return;
-            }
+        }
+        if (comment.length()!=0) {
             Map<String, Object> commentDocument = new HashMap<>();
             commentDocument.put("comment", comment);
             commentDocument.put("r_id", resourceID);
             commentDocument.put("time", new Timestamp(new Date()));
+            commentDocument.put("address", resource.getAddress());
+            commentDocument.put("type", resource.getType());
             db.collection("comment suggestions")
                     .add(commentDocument)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -74,7 +77,6 @@ public class Feedback extends AppCompatActivity {
                         }
                     });
         }
-
         if (checked) {
             if (problem.length()==0) {
                 Toast.makeText(this, "Please explain the issue with resource.", Toast.LENGTH_LONG).show();
@@ -84,6 +86,8 @@ public class Feedback extends AppCompatActivity {
                 problemDocument.put("issue", problem);
                 problemDocument.put("r_id", resourceID);
                 problemDocument.put("time", new Timestamp(new Date()));
+                problemDocument.put("address", resource.getAddress());
+                problemDocument.put("type", resource.getType());
 
                 db.collection("resource issues")
                         .add(problemDocument)
@@ -127,7 +131,7 @@ public class Feedback extends AppCompatActivity {
         setContentView(R.layout.activity_feedback);
 
         Intent intent = getIntent();
-        Resource resource = (Resource) intent.getSerializableExtra("selectedResource");
+        resource = (Resource) intent.getSerializableExtra("selectedResource");
 
         CollectionReference resCollection = db.collection("resources");
         resCollection.whereEqualTo("address", resource.getAddress()).whereEqualTo("type", resource.getType()).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
