@@ -1,4 +1,8 @@
 package com.example.helpmefind;
+// The following links provided a lot of help and examples for this code:
+// https://stackoverflow.com/questions/4308262/calculate-compass-bearing-heading-to-location-in-android
+// https://www.techrepublic.com/article/pro-tip-create-your-own-magnetic-compass-using-androids-internal-sensors/
+// https://stackoverflow.com/questions/7978618/rotating-an-imageview-like-a-compass-with-the-north-pole-set-elsewhere
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
